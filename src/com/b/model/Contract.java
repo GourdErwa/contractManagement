@@ -1,28 +1,28 @@
 package com.b.model;
 
 /**
- * @author HuKaiMo on 2016/3/9.
+ * @author Wei.Li on 2016/3/9.
  */
 public class Contract {
 
     private int id;
-    //合同状态
+    // 合同状态
     private int state;
 
     private String
-            //合同名称
+            // 合同名称
             name,
-    //甲方乙方
+    // 甲方乙方
     userName1, userName2,
-    //工程段
+    // 工程段
     engineeringSection,
-    //概算编码
+    // 概算编码
     encodingBudget,
-    //合同金额
+    // 合同金额
     contractAmount,
-    //分摊金额
+    // 分摊金额
     shareAmount,
-    //分摊金额比例
+    // 分摊金额比例
     shareRatio;
 
     public int getId() {

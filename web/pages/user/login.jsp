@@ -1,11 +1,16 @@
 <%--
   Created by IntelliJ IDEA.
-  User: HuKaiMo
+  User: Wei.Li
   Date: 2016/3/9
   Time: 19:11
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+%>
+
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
@@ -19,7 +24,8 @@
     <title>登录</title>
 
     <link href="./../../resource/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
+    <script src="./../../resource/js/login.js"></script>
+    <script src="./../../resource/js/jquery.min.js"></script>
     <style>
 
         body {
@@ -62,82 +68,63 @@
             border-top-right-radius: 0;
         }
 
-
     </style>
 </head>
 
-<script>
-    (function () {
-        'use strict';
-
-        function emulatedIEMajorVersion() {
-            var groups = /MSIE ([0-9.]+)/.exec(window.navigator.userAgent)
-            if (groups === null) {
-                return null
-            }
-            var ieVersionNum = parseInt(groups[1], 10)
-            return Math.floor(ieVersionNum)
-        }
-
-        function actualNonEmulatedIEMajorVersion() {
-            // Detects the actual version of IE in use, even if it's in an older-IE emulation mode.
-            // IE JavaScript conditional compilation docs: https://msdn.microsoft.com/library/121hztk3%28v=vs.94%29.aspx
-            // @cc_on docs: https://msdn.microsoft.com/library/8ka90k2e%28v=vs.94%29.aspx
-            var jscriptVersion = new Function('/*@cc_on return @_jscript_version; @*/')() // jshint ignore:line
-            if (jscriptVersion === undefined) {
-                return 11; // IE11+ not in emulation mode
-
-            }
-            if (jscriptVersion < 9) {
-                return 8; // IE8 (or lower; haven't tested on IE<8)
-            }
-            return jscriptVersion; // IE9 or IE10 in any mode, or IE11 in non-IE11 mode
-        }
-
-        var ua = window.navigator.userAgent;
-        if (ua.indexOf('Opera') > -1 || ua.indexOf('Presto') > -1) {
-            return; // Opera, which might pretend to be IE
-        }
-        var emulated = emulatedIEMajorVersion();
-        if (emulated === null) {
-            return; // Not IE
-        }
-        var nonEmulated = actualNonEmulatedIEMajorVersion()
-
-        if (emulated !== nonEmulated) {
-            window.alert('WARNING: You appear to be using IE' + nonEmulated + ' in IE' + emulated + ' emulation mode.\nIE emulation modes can behave significantly differently from ACTUAL older versions of IE.\nPLEASE DON\'T FILE BOOTSTRAP BUGS based on testing in IE emulation modes!')
-        }
-    })();
-
-    (function () {
-        'use strict';
-
-        if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
-            var msViewportStyle = document.createElement('style')
-            msViewportStyle.appendChild(
-                    document.createTextNode(
-                            '@-ms-viewport{width:auto!important}'
-                    )
-            );
-            document.querySelector('head').appendChild(msViewportStyle)
-        }
-
-    })();
-</script>
 <body>
 
 <div class="container">
-
     <form class="form-signin">
         <h2 class="form-signin-heading">登录</h2>
         <label for="userName" class="sr-only">用户名</label>
         <input type="text" id="userName" class="form-control" placeholder="用户名" required autofocus>
         <label for="passWd" class="sr-only">密码</label>
         <input type="password" id="passWd" class="form-control" placeholder="密码" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        <button class="btn btn-lg btn-primary btn-block" type="button" id="login">登录</button>
     </form>
-
-</div> <!-- /container -->
+</div>
 
 </body>
 </html>
+<script>
+
+    $(function () {
+
+        $("#login").click(function () {
+
+            var userName = $("#userName").val().trim();
+            var passWd = $("#passWd").val().trim();
+
+            if (userName == "" || passWd == "") {
+                alert("请输入用户名密码");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "<%=basePath%>" + "UserServlet",
+                data: {
+                    "method": "login",
+                    "userName": userName,
+                    "passWd": passWd
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    if (data.succeed) {
+                        window.location.href = "<%=basePath%>" + "pages/home/home.jsp";
+                    } else {
+                        alert("用户名密码不匹配");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus) {
+                    console.error(textStatus);
+                    alert("登录过程发生错误" + textStatus);
+                }
+
+            });
+        });
+
+    });
+
+</script>

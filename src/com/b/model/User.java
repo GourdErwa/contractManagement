@@ -1,11 +1,17 @@
 package com.b.model;
 
 /**
- * @author HuKaiMo on 2016/3/9.
+ * @author Wei.Li on 2016/3/9.
  */
 public class User {
 
     private String userName, passWd, phone, email;
+
+    public User(String userName, String phone, String email) {
+        this.userName = userName;
+        this.phone = phone;
+        this.email = email;
+    }
 
     public String getUserName() {
         return userName;

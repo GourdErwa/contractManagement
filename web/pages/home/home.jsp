@@ -1,11 +1,15 @@
 <%--
   Created by IntelliJ IDEA.
-  User: HuKaiMo
+  User: Wei.Li
   Date: 2016/3/9
   Time: 19:30
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+%>
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
@@ -19,8 +23,6 @@
     <title>首页</title>
     <link href="./../../resource/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="./../../resource/css/jumbotron-narrow.css" rel="stylesheet">
-
-
 </head>
 
 <body>
@@ -29,9 +31,15 @@
     <div class="header clearfix">
         <nav>
             <ul class="nav nav-pills pull-right">
-                <li role="presentation" class="active"><a href="#">主页</a></li>
-                <li role="presentation"><a href="#">用户管理</a></li>
-                <li role="presentation"><a href="#">合同管理</a></li>
+                <li role="presentation" class="active">
+                    <a href="<%=basePath%>pages/home/home.jsp">主页</a>
+                </li>
+                <li role="presentation">
+                    <a href="<%=basePath%>pages/user/showAllUsers.jsp">用户管理</a>
+                </li>
+                <li role="presentation">
+                    <a href="<%=basePath%>pages/contract/showAllContracts.jsp">合同管理</a>
+                </li>
             </ul>
         </nav>
         <h3 class="text-muted">项目名称</h3>

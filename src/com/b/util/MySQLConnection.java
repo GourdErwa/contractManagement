@@ -6,20 +6,20 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 /**
- * @author HuKaiMo on 2016/3/9.
+ * @author Wei.Li on 2016/3/9.
  */
 public class MySQLConnection {
 
-    private static final String url = "jdbc:mysql://localhost/test?user=root&password=yqs2602555";
+    private static final String URL = "jdbc:mysql://localhost/contractManagement?user=root&password=root";
 
     public static Connection getConn() {
 
         Connection conn = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver"); //加载mysq驱动
-            conn = DriverManager.getConnection(url);
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(URL);
         } catch (Exception e) {
-            System.out.println("数据库关闭错误");
+            System.out.println("数据库链接过程发生错误" + e.getMessage());
         }
 
         return conn;

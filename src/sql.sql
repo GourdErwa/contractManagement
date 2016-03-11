@@ -1,5 +1,10 @@
 
-CREATE TABLE `user` (
+
+DROP DATABASE IF EXISTS contractManagement;
+
+CREATE DATABASE IF NOT EXISTS contractManagement;
+
+CREATE TABLE IF NOT EXISTS `user` (
   `userName` VARCHAR(255) NOT NULL PRIMARY KEY,
   `passWd`   VARCHAR(255) NOT NULL,
   `phone`    VARCHAR(255) DEFAULT NULL,
@@ -9,7 +14,7 @@ CREATE TABLE `user` (
   DEFAULT CHARSET = utf8;
 
 
-CREATE TABLE `contract` (
+CREATE TABLE IF NOT EXISTS `contract` (
   `id`                 INT(11) NOT NULL PRIMARY KEY,
   `state`              INT(11)      DEFAULT 0,
   `name`               VARCHAR(255) DEFAULT NULL,

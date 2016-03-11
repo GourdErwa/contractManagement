@@ -8,8 +8,10 @@ import java.io.IOException;
  */
 public class CharsetFilter implements Filter {
 
+    private static String charset = "utf-8";
     private FilterConfig filterConfig;
-    private String charset = "utf-8";
+
+
 
     @Override
     public void destroy() {
@@ -20,7 +22,8 @@ public class CharsetFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
         request.setCharacterEncoding(charset);
-        //response.setContentType("text/html;charset='" + charset + "'");
+        //response.setContentType("charset='" + charset + "'");
+        response.setCharacterEncoding(charset);
         chain.doFilter(request, response);
     }
 

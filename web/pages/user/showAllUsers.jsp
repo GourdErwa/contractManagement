@@ -12,23 +12,8 @@
 %>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
     <title>用户管理</title>
-    <script src="./../../resource/js/jquery.min.js"></script>
-
-    <link href="./../../resource/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="./../../resource/css/jumbotron-narrow.css" rel="stylesheet">
-    <link href="./../../resource/dataTables/jquery.dataTables.min.css" rel="stylesheet">
-    <script src="./../../resource/dataTables/jquery.dataTables.min.js"></script>
-
-
+    <jsp:include page="./../public/public.jsp"/>
 </head>
 <body>
 <div class="container">
@@ -48,24 +33,31 @@
         </nav>
         <h3 class="text-muted">项目名称</h3>
     </div>
+    <div>
+        <button style="float: right;margin-bottom: 10px;" type="button" class="btn btn-info"
+                onclick="window.location.href='<%=basePath%>pages/user/createUser.jsp'"
+        >新建用户
+        </button>
 
-    <table id="allUsersTable" class="display" cellspacing="0" width="100%">
-        <thead>
-        <tr>
-            <th>用户名</th>
-            <th>电话</th>
-            <th>邮箱</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-    </table>
+        <table id="showTable" class="display" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>用户名</th>
+                <th>电话</th>
+                <th>邮箱</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 </body>
 </html>
 
 <script>
 
-    var $allUsersTable = $("#allUsersTable");
+    var $showTable = $("#showTable");
+    var table;
 
     var dataTableSetting = {
 
@@ -110,7 +102,9 @@
             },
             {
                 "render": function (data, type, row) {
-                    return "";
+                    return "<button  type=\"button\" class=\"btn btn-warning\" " +
+                            "onclick=\"window.location.href ='<%=basePath%>pages/user/updateUser.jsp?userName=" + data + "'\">修改</button>" +
+                            "&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-danger js-del\" userName=" + data + ">删除</button>";
                 },
                 "orderable": false,
                 "targets": 3
@@ -120,6 +114,37 @@
 
 
     $(function () {
+
+        /**
+         * 注册删除事件
+         */
+        var delRegister = function () {
+            $showTable.find(" tbody").on('click', 'tr .js-del', function () {
+                var $2 = $(this);
+                var userName = $2.attr("userName");
+                $2.parent().parent().addClass("js-del-tr");
+                $.ajax({
+                    type: "POST",
+                    url: "<%=basePath%>" + "UserServlet",
+                    data: {
+                        "method": "deleteUser",
+                        "userName": userName
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        MSG.showMsg(data.data);
+                        if (data.succeed) {
+                            table.row(".js-del-tr").remove().draw(false);
+                        }
+                    }
+                });
+
+            });
+        };
+
+        /**
+         * 获取所有用户数据展示
+         */
         $.ajax({
             type: "POST",
             url: "<%=basePath%>" + "UserServlet",
@@ -130,11 +155,8 @@
             success: function (data) {
                 console.log(data);
                 dataTableSetting.data = data;
-                var table = $allUsersTable.DataTable(dataTableSetting);
-            },
-            error: function (XMLHttpRequest, textStatus) {
-                console.error(textStatus);
-                alert("过程发生错误" + textStatus);
+                table = $showTable.DataTable(dataTableSetting);
+                delRegister();
             }
         });
 

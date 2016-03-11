@@ -22,6 +22,52 @@ import java.util.List;
  */
 public class UserServlet extends HttpServlet {
 
+
+    //测试数据自动插入
+    static {
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = null;
+            ps = null;
+            rs = null;
+
+            conn = MySQLConnection.getConn();
+            ps = conn.prepareStatement("SELECT userName FROM user WHERE userName = 'admin'");
+            rs = ps.executeQuery();
+            final boolean first = rs.first();
+
+            ps = conn.prepareStatement("INSERT INTO user (userName, passWd, phone, email) VALUE (?,?,?,?)");
+            if (first) {
+                for (int i = 0; i < 10; i++) {
+                    String x = null;
+                    try {
+                        x = "测试用户-" + i;
+                        ps.setString(1, x);
+                        ps.setString(2, i + "");
+                        ps.setString(3, "18601341988");
+                        ps.setString(4, "liweityut@163.com");
+                        ps.execute();
+                    } catch (SQLException e) {
+                        System.err.println("insert test user ,ignore .  key=" + x);
+                    }
+                }
+            } else {
+                ps.setString(1, "admin");
+                ps.setString(2, "admin");
+                ps.setString(3, "18601341988");
+                ps.setString(4, "liweityut@163.com");
+                ps.execute();
+            }
+        } catch (SQLException e) {
+            System.err.println("insert admin user error :" + e.getMessage());
+        } finally {
+            MySQLConnection.close(conn, ps, rs);
+        }
+    }
+
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         try {
@@ -33,6 +79,10 @@ public class UserServlet extends HttpServlet {
                 }
                 case "getAllUsers": {
                     getAllUsers(req, res);
+                    break;
+                }
+                case "getUsersByUserName": {
+                    getUsersByUserName(req, res);
                     break;
                 }
                 case "createUser": {
@@ -104,6 +154,34 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    //通过用户名获取某个用户信息
+    private void getUsersByUserName(ServletRequest request, ServletResponse response) throws SQLException, IOException {
+
+        final String userName = request.getParameter("userName");
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        User user = null;
+
+        try {
+            conn = MySQLConnection.getConn();
+            ps = conn.prepareStatement("SELECT phone,email FROM user WHERE userName = ?");
+            ps.setString(1, userName);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                final String phone = rs.getString(1);
+                final String email = rs.getString(2);
+                user = new User(userName, phone, email);
+            }
+            PrintWriterUtil.printWriterObjectToJson(response, user);
+        } finally {
+            MySQLConnection.close(conn, ps, rs);
+        }
+    }
+
     //新建用户
     private void createUser(ServletRequest request, ServletResponse response) throws SQLException, IOException {
 
@@ -120,6 +198,7 @@ public class UserServlet extends HttpServlet {
         try {
             conn = MySQLConnection.getConn();
             ps = conn.prepareStatement("SELECT userName FROM user WHERE userName = ?");
+            ps.setString(1, userName);
             rs = ps.executeQuery();
             final boolean first = rs.first();
 
@@ -131,9 +210,11 @@ public class UserServlet extends HttpServlet {
                 ps.setString(2, passWd);
                 ps.setString(3, phone);
                 ps.setString(4, email);
-                final boolean execute = ps.execute();
-                PrintWriterUtil.printWriterObjectToJson(response, execute ? new ResultVO(true) : new ResultVO(false, "创建过程出错"));
+                ps.execute();
+                PrintWriterUtil.printWriterObjectToJson(response, new ResultVO(true, "创建成功"));
             }
+        } catch (Exception e) {
+            PrintWriterUtil.printWriterObjectToJson(response, new ResultVO(false, "创建过程出错"));
         } finally {
             MySQLConnection.close(conn, ps, rs);
         }
@@ -148,7 +229,6 @@ public class UserServlet extends HttpServlet {
         final String phone = request.getParameter("phone");
         final String email = request.getParameter("email");
 
-
         Connection conn = null;
         PreparedStatement ps = null;
 
@@ -161,8 +241,8 @@ public class UserServlet extends HttpServlet {
             ps.setString(3, email);
             ps.setString(4, userName);
 
-            final int i = ps.executeUpdate();
-            PrintWriterUtil.printWriterObjectToJson(response, new ResultVO(true, i));
+            ps.executeUpdate();
+            PrintWriterUtil.printWriterObjectToJson(response, new ResultVO(true, "修改成功"));
         } finally {
             MySQLConnection.close(conn, ps);
         }
@@ -179,8 +259,10 @@ public class UserServlet extends HttpServlet {
             conn = MySQLConnection.getConn();
             ps = conn.prepareStatement("DELETE FROM user WHERE userName = ?");
             ps.setString(1, userName);
-            final int i = ps.executeUpdate();
-            PrintWriterUtil.printWriterObjectToJson(response, new ResultVO(true, i));
+            ps.executeUpdate();
+            PrintWriterUtil.printWriterObjectToJson(response, new ResultVO(true, "删除成功"));
+        } catch (Exception e) {
+            PrintWriterUtil.printWriterObjectToJson(response, new ResultVO(false, "删除失败:error=" + e.getMessage()));
         } finally {
             MySQLConnection.close(conn, ps);
         }

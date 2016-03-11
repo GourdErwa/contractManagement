@@ -10,7 +10,7 @@ import java.sql.Statement;
  */
 public class MySQLConnection {
 
-    private static final String URL = "jdbc:mysql://localhost/contractManagement?user=root&password=root";
+    private static final String URL = "jdbc:mysql://localhost/contractManagement?user=root&password=root&useUnicode=true&characterEncoding=utf-8";
 
     public static Connection getConn() {
 

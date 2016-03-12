@@ -29,9 +29,12 @@
                 <li role="presentation">
                     <a href="<%=basePath%>pages/contract/showAllContracts.jsp">合同管理</a>
                 </li>
+                <li role="presentation">
+                    <a href="#">当前用户 : <%=session.getAttribute("loginUserName")%></a>
+                </li>
             </ul>
         </nav>
-        <h3 class="text-muted">项目名称</h3>
+        <h3 class="text-muted"><%=application.getAttribute("proName")%></h3>
     </div>
     <div>
         <button style="float: right;margin-bottom: 10px;" type="button" class="btn btn-info"

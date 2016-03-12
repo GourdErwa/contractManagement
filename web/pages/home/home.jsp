@@ -40,54 +40,57 @@
                 <li role="presentation">
                     <a href="<%=basePath%>pages/contract/showAllContracts.jsp">合同管理</a>
                 </li>
+                <li role="presentation">
+                    <a href="#">当前用户 : <%=session.getAttribute("loginUserName")%></a>
+                </li>
             </ul>
         </nav>
-        <h3 class="text-muted">项目名称</h3>
+        <h3 class="text-muted"><%=application.getAttribute("proName")%></h3>
     </div>
 
     <div class="jumbotron">
-        <h1>Jumbotron heading</h1>
+        <h1><%=application.getAttribute("proName")%></h1>
 
-        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus
-            commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-
-        <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
+        <p class="lead">
+            <%=application.getAttribute("proNameDescribe")%>
+        </p>
+        <%--<p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>--%>
     </div>
+    <%--
+        <div class="row marketing">
+            <div class="col-lg-6">
+                <h4>Subheading</h4>
 
-    <div class="row marketing">
-        <div class="col-lg-6">
-            <h4>Subheading</h4>
+                <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
 
-            <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+                <h4>Subheading</h4>
 
-            <h4>Subheading</h4>
+                <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet
+                    fermentum.</p>
 
-            <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet
-                fermentum.</p>
+                <h4>Subheading</h4>
 
-            <h4>Subheading</h4>
+                <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+            </div>
 
-            <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-        </div>
+            <div class="col-lg-6">
+                <h4>Subheading</h4>
 
-        <div class="col-lg-6">
-            <h4>Subheading</h4>
+                <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
 
-            <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+                <h4>Subheading</h4>
 
-            <h4>Subheading</h4>
+                <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet
+                    fermentum.</p>
 
-            <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet
-                fermentum.</p>
+                <h4>Subheading</h4>
 
-            <h4>Subheading</h4>
-
-            <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-        </div>
-    </div>
+                <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+            </div>
+        </div>--%>
 
     <footer class="footer">
-        <p>&copy; Company 2014</p>
+        <p>&copy; Company 2016</p>
     </footer>
 
 </div> <!-- /container -->

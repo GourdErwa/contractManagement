@@ -25,6 +25,23 @@ public class Contract {
     // 分摊金额比例
     shareRatio;
 
+    public Contract() {
+    }
+
+    public Contract(int id, int state, String name, String userName1, String userName2, String engineeringSection,
+                    String encodingBudget, String contractAmount, String shareAmount, String shareRatio) {
+        this.id = id;
+        this.state = state;
+        this.name = name;
+        this.userName1 = userName1;
+        this.userName2 = userName2;
+        this.engineeringSection = engineeringSection;
+        this.encodingBudget = encodingBudget;
+        this.contractAmount = contractAmount;
+        this.shareAmount = shareAmount;
+        this.shareRatio = shareRatio;
+    }
+
     public int getId() {
         return id;
     }

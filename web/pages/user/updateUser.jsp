@@ -29,9 +29,12 @@
                 <li role="presentation">
                     <a href="<%=basePath%>pages/contract/showAllContracts.jsp">合同管理</a>
                 </li>
+                <li role="presentation">
+                    <a href="#">当前用户 : <%=session.getAttribute("loginUserName")%></a>
+                </li>
             </ul>
         </nav>
-        <h3 class="text-muted">项目名称</h3>
+        <h3 class="text-muted"><%=application.getAttribute("proName")%></h3>
     </div>
     <div>
 
@@ -83,6 +86,11 @@
 
     $(function () {
 
+        <%
+        String userName = request.getParameter("userName");
+        userName = new String(userName.getBytes("ISO-8859-1"),"UTF-8");
+
+        %>
         /**
          * 获取修改信息
          */
@@ -91,7 +99,7 @@
             url: "<%=basePath%>" + "UserServlet",
             data: {
                 "method": "getUsersByUserName",
-                "userName": "<%=request.getParameter("userName")%>"
+                "userName": "<%=userName%>"
             },
             dataType: "json",
             success: function (data) {
@@ -110,7 +118,7 @@
 
             var userName = $userName.val();
 
-            if (userName !== "<%=request.getParameter("userName")%>") {
+            if (userName !== "<%=userName%>") {
                 MSG.showMsg("待修改用户名失效");
                 return;
             }

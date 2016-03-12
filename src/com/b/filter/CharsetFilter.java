@@ -12,7 +12,6 @@ public class CharsetFilter implements Filter {
     private FilterConfig filterConfig;
 
 
-
     @Override
     public void destroy() {
         filterConfig = null;

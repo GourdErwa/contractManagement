@@ -12,18 +12,8 @@
 %>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
     <title>合同管理</title>
-    <link href="./../../resource/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="./../../resource/dataTables/jquery.dataTables.min.css" rel="stylesheet">
-    <script src="./../../resource/dataTables/jquery.dataTables.min.js"></script>
+    <jsp:include page="./../public/public.jsp"/>
 </head>
 <body>
 <div class="container">
@@ -39,50 +29,177 @@
                 <li role="presentation" class="active">
                     <a href="<%=basePath%>pages/contract/showAllContracts.jsp">合同管理</a>
                 </li>
+                <li role="presentation">
+                    <a href="#">当前用户 : <%=session.getAttribute("loginUserName")%></a>
+                </li>
             </ul>
         </nav>
-        <h3 class="text-muted">项目名称</h3>
+        <h3 class="text-muted"><%=application.getAttribute("proName")%></h3>
     </div>
+    <div>
+        <button style="float: right;margin-bottom: 10px;" type="button" class="btn btn-info"
+                onclick="window.location.href='<%=basePath%>pages/contract/createContract.jsp'"
+        >新建合同
+        </button>
 
-    <table id="allUsers" class="display" cellspacing="0" width="100%">
-        <thead>
-        <tr>
-            <th>用户名</th>
-            <th>电话</th>
-            <th>邮箱</th>
-        </tr>
-        </thead>
-        <tfoot>
-        <tr>
-            <th>用户名</th>
-            <th>电话</th>
-            <th>邮箱</th>
-        </tr>
-        </tfoot>
-    </table>
-
+        <table id="showTable" class="display" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>名称</th>
+                <th>甲方</th>
+                <th>乙方</th>
+                <th>工程段</th>
+                <th>概算编码</th>
+                <th>合同金额</th>
+                <th>分摊金额(万)</th>
+                <th>分摊金额比例(%)</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 </body>
 </html>
 
 <script>
 
-    var $allUsersTable = $("#allUsersTable");
+    var $showTable = $("#showTable");
+    var table;
+
+    var dataTableSetting = {
+
+        "language": {
+            "sProcessing": "处理中...",
+            "lengthMenu": "每页 _MENU_ 条记录",
+            "zeroRecords": "查无数据",
+            "info": "_PAGE_ / _PAGES_",
+            "infoEmpty": "暂无数据",
+            "infoFiltered": "(过滤总数 _MAX_ 条)",
+            "search": "检索",
+            "sLoadingRecords": "载入中...",
+            "oPaginate": {
+                "sNext": ">",
+                "sPrevious": "<"
+            }
+        },
+        "columns": [
+            {"data": "name"},
+            {"data": "userName1"},
+            {"data": "userName2"},
+            {"data": "engineeringSection"},
+            {"data": "encodingBudget"},
+            {"data": "contractAmount"},
+            {"data": "shareAmount"},
+            {"data": "shareRatio"},
+            {"data": "id"}
+        ],
+        "columnDefs": [
+            {
+                "render": function (data, type, row) {
+                    return data;
+                },
+                "targets": 0
+            },
+            {
+                "render": function (data, type, row) {
+                    return data;
+                },
+                "targets": 1
+            },
+            {
+                "render": function (data, type, row) {
+                    return data;
+                },
+                "targets": 2
+            },
+            {
+                "render": function (data, type, row) {
+                    return data;
+                },
+                "targets": 3
+            },
+            {
+                "render": function (data, type, row) {
+                    return data;
+                },
+                "targets": 4
+            },
+            {
+                "render": function (data, type, row) {
+                    return data;
+                },
+                "targets": 5
+            },
+            {
+                "render": function (data, type, row) {
+                    return data;
+                },
+                "targets": 6
+            },
+            {
+                "render": function (data, type, row) {
+                    return data;
+                },
+                "targets": 7
+            },
+            {
+                "render": function (data, type, row) {
+                    return "<button  type=\"button\" class=\"btn btn-warning\" " +
+                            "onclick=\"window.location.href ='<%=basePath%>pages/contract/updateContract.jsp?id=" + data + "'\">修改</button>" +
+                            "&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-danger js-del\" contractId=" + data + ">删除</button>";
+                },
+                "orderable": false,
+                "targets": 8
+            }
+        ]
+    };
+
 
     $(function () {
+
+        /**
+         * 注册删除事件
+         */
+        var delRegister = function () {
+            $showTable.find(" tbody").on('click', 'tr .js-del', function () {
+                var $2 = $(this);
+                var id = $2.attr("contractId");
+                $2.parent().parent().addClass("js-del-tr");
+                $.ajax({
+                    type: "POST",
+                    url: "<%=basePath%>" + "ContractServlet",
+                    data: {
+                        "method": "deleteContract",
+                        "id": id
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        MSG.showMsg(data.data);
+                        if (data.succeed) {
+                            table.row(".js-del-tr").remove().draw(false);
+                        }
+                    }
+                });
+
+            });
+        };
+
+        /**
+         * 获取所有用户数据展示
+         */
         $.ajax({
             type: "POST",
-            url: "<%=basePath%>" + "getAllUsers",
+            url: "<%=basePath%>" + "ContractServlet",
+            data: {
+                "method": "getAllContracts"
+            },
             dataType: "json",
             success: function (data) {
                 console.log(data);
-                $allUsersTable.DataTable({
-                    data: data
-                });
-            },
-            error: function (XMLHttpRequest, textStatus) {
-                console.error(textStatus);
-                alert("过程发生错误" + textStatus);
+                dataTableSetting.data = data;
+                table = $showTable.DataTable(dataTableSetting);
+                delRegister();
             }
         });
 

@@ -2,6 +2,7 @@ package com.b.servlet;
 
 import com.b.model.ResultVO;
 import com.b.model.User;
+import com.b.util.Constant;
 import com.b.util.MySQLConnection;
 import com.b.util.PrintWriterUtil;
 
@@ -9,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -122,7 +124,14 @@ public class UserServlet extends HttpServlet {
             ps.setString(2, passWd);
 
             rs = ps.executeQuery();
-            PrintWriterUtil.printWriterObjectToJson(response, rs.first() ? new ResultVO(true) : new ResultVO(false));
+            final boolean first = rs.first();
+            PrintWriterUtil.printWriterObjectToJson(response, first ? new ResultVO(true) : new ResultVO(false));
+            if (first) {
+                final HttpServletRequest servletRequest = (HttpServletRequest) request;
+                servletRequest.getSession().setAttribute("loginUserName", userName);
+                servletRequest.getSession().getServletContext().setAttribute("proName", Constant.PRO_NAME);
+                servletRequest.getSession().getServletContext().setAttribute("proNameDescribe", Constant.PRO_NAME_DESCRIBE);
+            }
         } finally {
             MySQLConnection.close(conn, ps, rs);
         }
@@ -214,7 +223,7 @@ public class UserServlet extends HttpServlet {
                 PrintWriterUtil.printWriterObjectToJson(response, new ResultVO(true, "创建成功"));
             }
         } catch (Exception e) {
-            PrintWriterUtil.printWriterObjectToJson(response, new ResultVO(false, "创建过程出错"));
+            PrintWriterUtil.printWriterObjectToJson(response, new ResultVO(false, "创建过程出错 , error = " + e.getMessage()));
         } finally {
             MySQLConnection.close(conn, ps, rs);
         }

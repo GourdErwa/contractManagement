@@ -1,5 +1,3 @@
-
-
 DROP DATABASE IF EXISTS contractManagement;
 
 CREATE DATABASE IF NOT EXISTS contractManagement;
@@ -29,3 +27,6 @@ CREATE TABLE IF NOT EXISTS `contract` (
   ENGINE = MyISAM
   DEFAULT CHARSET = utf8;
 ALTER TABLE contract MODIFY id INTEGER AUTO_INCREMENT;
+
+
+INSERT INTO user (userName, passWd, phone, email) VALUES ('admin', 'admin', '18601999999', 'liweityut@163.com');

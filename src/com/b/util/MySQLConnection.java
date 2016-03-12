@@ -10,14 +10,12 @@ import java.sql.Statement;
  */
 public class MySQLConnection {
 
-    private static final String URL = "jdbc:mysql://localhost/contractManagement?user=root&password=root&useUnicode=true&characterEncoding=utf-8";
-
     public static Connection getConn() {
 
         Connection conn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(URL);
+            conn = DriverManager.getConnection(Constant.URL);
         } catch (Exception e) {
             System.out.println("数据库链接过程发生错误" + e.getMessage());
         }

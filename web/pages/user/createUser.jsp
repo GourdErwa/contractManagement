@@ -30,11 +30,13 @@
                     <a href="<%=basePath%>pages/contract/showAllContracts.jsp">合同管理</a>
                 </li>
                 <li role="presentation">
-                    <a href="#">当前用户 : <%=session.getAttribute("loginUserName")%></a>
+                    <a href="#">当前用户 : <%=session.getAttribute("loginUserName")%>
+                    </a>
                 </li>
             </ul>
         </nav>
-        <h3 class="text-muted"><%=application.getAttribute("proName")%></h3>
+        <h3 class="text-muted"><%=application.getAttribute("proName")%>
+        </h3>
     </div>
     <div>
 

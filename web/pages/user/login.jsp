@@ -114,7 +114,11 @@
                     if (data.succeed) {
                         window.location.href = "<%=basePath%>" + "pages/home/home.jsp";
                     } else {
-                        alert("用户名密码不匹配");
+                        if (data.data) {
+                            alert(data.data);
+                        } else {
+                            alert("用户名密码不匹配");
+                        }
                     }
                 },
                 error: function (XMLHttpRequest, textStatus) {

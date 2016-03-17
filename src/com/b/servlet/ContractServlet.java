@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,74 +20,6 @@ import java.util.List;
  * @author Wei.Li on 2016/3/9.
  */
 public class ContractServlet extends HttpServlet {
-
-    /*
-    private int id;
-        // 合同状态
-        private int c;
-
-        private String
-                // 合同名称
-                name,
-        // 甲方乙方
-        userName1, userName2,
-        // 工程段
-        engineeringSection,
-        // 概算编码
-        encodingBudget,
-        // 合同金额
-        contractAmount,
-        // 分摊金额
-        shareAmount,
-        // 分摊金额比例
-        shareRatio;
-     */
-    //测试数据自动插入
-    static {
-
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            conn = null;
-            ps = null;
-            rs = null;
-
-            conn = MySQLConnection.getConn();
-            ps = conn.prepareStatement("SELECT * FROM contract");
-            rs = ps.executeQuery();
-            final boolean first = rs.first();
-
-
-            if (!first) {
-                ps = conn.prepareStatement("INSERT INTO contract " +
-                        "(state, name, userName1, userName2, engineeringSection,encodingBudget,contractAmount,shareAmount,shareRatio)" +
-                        " VALUE (?,?,?,?,?,?,?,?,?)");
-                for (int i = 0; i < 10; i++) {
-                    String x = null;
-                    try {
-                        x = "合同-" + i;
-                        ps.setInt(1, 0);
-                        ps.setString(2, x);
-                        ps.setString(3, "张三");
-                        ps.setString(4, "李四");
-                        ps.setString(5, "001");
-                        ps.setString(6, "001-002");
-                        ps.setString(7, "100");
-                        ps.setString(8, "98");
-                        ps.setString(9, "30");
-                        ps.execute();
-                    } catch (SQLException e) {
-                        System.err.println("insert test user ,ignore .  key=" + x);
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("insert admin user error :" + e.getMessage());
-        } finally {
-            MySQLConnection.close(conn, ps, rs);
-        }
-    }
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
@@ -120,13 +51,13 @@ public class ContractServlet extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            PrintWriterUtil.printWriterObjectToJson(res, new ResultVO(false, "执行过程出错:" + e.getMessage()));
         }
     }
 
 
     //获取所有用户信息
-    private void getAllContracts(ServletRequest request, ServletResponse response) throws SQLException, IOException {
+    private void getAllContracts(ServletRequest request, ServletResponse response) throws Exception {
 
         Connection conn = null;
         PreparedStatement ps = null;
@@ -157,7 +88,7 @@ public class ContractServlet extends HttpServlet {
     }
 
     //通过用户名获取某个用户信息
-    private void getContractById(ServletRequest request, ServletResponse response) throws SQLException, IOException {
+    private void getContractById(ServletRequest request, ServletResponse response) throws Exception {
 
         final String id = request.getParameter("id");
 
@@ -188,7 +119,7 @@ public class ContractServlet extends HttpServlet {
     }
 
     //新建用户
-    private void createContract(ServletRequest request, ServletResponse response) throws SQLException, IOException {
+    private void createContract(ServletRequest request, ServletResponse response) throws Exception {
 
         final String name = request.getParameter("name");
         final String userName1 = request.getParameter("userName1");
@@ -234,7 +165,7 @@ public class ContractServlet extends HttpServlet {
     }
 
     //修改用户
-    private void updateContract(ServletRequest request, ServletResponse response) throws SQLException, IOException {
+    private void updateContract(ServletRequest request, ServletResponse response) throws Exception {
 
 
         final String id = request.getParameter("id");
@@ -269,7 +200,7 @@ public class ContractServlet extends HttpServlet {
     }
 
     //删除用户
-    private void deleteContract(ServletRequest request, ServletResponse response) throws SQLException, IOException {
+    private void deleteContract(ServletRequest request, ServletResponse response) throws Exception {
 
         final String id = request.getParameter("id");
         Connection conn = null;

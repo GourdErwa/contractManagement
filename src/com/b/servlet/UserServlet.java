@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,52 +22,6 @@ import java.util.List;
  * @author Wei.Li on 2016/3/9.
  */
 public class UserServlet extends HttpServlet {
-
-
-    //测试数据自动插入
-    static {
-
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            conn = null;
-            ps = null;
-            rs = null;
-
-            conn = MySQLConnection.getConn();
-            ps = conn.prepareStatement("SELECT userName FROM user WHERE userName = 'admin'");
-            rs = ps.executeQuery();
-            final boolean first = rs.first();
-
-            ps = conn.prepareStatement("INSERT INTO user (userName, passWd, phone, email) VALUE (?,?,?,?)");
-            if (first) {
-                for (int i = 0; i < 10; i++) {
-                    String x = null;
-                    try {
-                        x = "测试用户-" + i;
-                        ps.setString(1, x);
-                        ps.setString(2, i + "");
-                        ps.setString(3, "18601341988");
-                        ps.setString(4, "liweityut@163.com");
-                        ps.execute();
-                    } catch (SQLException e) {
-                        System.err.println("insert test user ,ignore .  key=" + x);
-                    }
-                }
-            } else {
-                ps.setString(1, "admin");
-                ps.setString(2, "admin");
-                ps.setString(3, "18601341988");
-                ps.setString(4, "liweityut@163.com");
-                ps.execute();
-            }
-        } catch (SQLException e) {
-            System.err.println("insert admin user error :" + e.getMessage());
-        } finally {
-            MySQLConnection.close(conn, ps, rs);
-        }
-    }
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
@@ -104,12 +57,12 @@ public class UserServlet extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            PrintWriterUtil.printWriterObjectToJson(res, new ResultVO(false, "请求执行过程出错:" + e.getMessage()));
         }
     }
 
     //登录
-    private void login(ServletRequest request, ServletResponse response) throws SQLException, IOException {
+    private void login(ServletRequest request, ServletResponse response) throws Exception {
 
         final String userName = request.getParameter("userName");
         final String passWd = request.getParameter("passWd");
@@ -139,7 +92,7 @@ public class UserServlet extends HttpServlet {
 
 
     //获取所有用户信息
-    private void getAllUsers(ServletRequest request, ServletResponse response) throws SQLException, IOException {
+    private void getAllUsers(ServletRequest request, ServletResponse response) throws Exception {
 
         Connection conn = null;
         PreparedStatement ps = null;
@@ -164,7 +117,7 @@ public class UserServlet extends HttpServlet {
     }
 
     //通过用户名获取某个用户信息
-    private void getUsersByUserName(ServletRequest request, ServletResponse response) throws SQLException, IOException {
+    private void getUsersByUserName(ServletRequest request, ServletResponse response) throws Exception {
 
         final String userName = request.getParameter("userName");
 
@@ -192,7 +145,7 @@ public class UserServlet extends HttpServlet {
     }
 
     //新建用户
-    private void createUser(ServletRequest request, ServletResponse response) throws SQLException, IOException {
+    private void createUser(ServletRequest request, ServletResponse response) throws Exception {
 
         final String userName = request.getParameter("userName");
         final String passWd = request.getParameter("passWd");
@@ -230,7 +183,7 @@ public class UserServlet extends HttpServlet {
     }
 
     //修改用户
-    private void updateUser(ServletRequest request, ServletResponse response) throws SQLException, IOException {
+    private void updateUser(ServletRequest request, ServletResponse response) throws Exception {
 
 
         final String userName = request.getParameter("userName");
@@ -258,7 +211,7 @@ public class UserServlet extends HttpServlet {
     }
 
     //删除用户
-    private void deleteUser(ServletRequest request, ServletResponse response) throws SQLException, IOException {
+    private void deleteUser(ServletRequest request, ServletResponse response) throws Exception {
 
         final String userName = request.getParameter("userName");
         Connection conn = null;

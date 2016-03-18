@@ -21,7 +21,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>登录</title>
+    <title>登录-<%=application.getAttribute("proName")%></title>
 
     <link href="./../../resource/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="./../../resource/js/login.js"></script>

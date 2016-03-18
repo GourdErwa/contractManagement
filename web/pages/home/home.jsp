@@ -20,83 +20,30 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>首页</title>
-    <link href="./../../resource/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="./../../resource/css/jumbotron-narrow.css" rel="stylesheet">
+    <title>首页-<%=application.getAttribute("proName")%></title>
+    <jsp:include page="./../public/public.jsp"/>
 </head>
 
 <body>
 
 <div class="container">
-    <div class="header clearfix">
-        <nav>
-            <ul class="nav nav-pills pull-right">
-                <li role="presentation" class="active">
-                    <a href="<%=basePath%>pages/home/home.jsp">主页</a>
-                </li>
-                <li role="presentation">
-                    <a href="<%=basePath%>pages/user/showAllUsers.jsp">用户管理</a>
-                </li>
-                <li role="presentation">
-                    <a href="<%=basePath%>pages/contract/showAllContracts.jsp">合同管理</a>
-                </li>
-                <li role="presentation">
-                    <a href="#">当前用户 : <%=session.getAttribute("loginUserName")%>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <h3 class="text-muted"><%=application.getAttribute("proName")%>
-        </h3>
-    </div>
 
-    <div class="jumbotron">
-        <h1><%=application.getAttribute("proName")%>
-        </h1>
+    <jsp:include page="./../public/nav.jsp"/>
 
-        <p class="lead">
+    <div class="jumbotron" style="min-height: 410px;">
+        <h2><%=application.getAttribute("proName")%>
+        </h2>
+
+        <p class="lead" style="text-align: left;">
             <%=application.getAttribute("proNameDescribe")%>
         </p>
-        <%--<p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>--%>
     </div>
-    <%--
-        <div class="row marketing">
-            <div class="col-lg-6">
-                <h4>Subheading</h4>
-
-                <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-                <h4>Subheading</h4>
-
-                <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet
-                    fermentum.</p>
-
-                <h4>Subheading</h4>
-
-                <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-            </div>
-
-            <div class="col-lg-6">
-                <h4>Subheading</h4>
-
-                <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-                <h4>Subheading</h4>
-
-                <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet
-                    fermentum.</p>
-
-                <h4>Subheading</h4>
-
-                <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-            </div>
-        </div>--%>
 
     <footer class="footer">
         <p>&copy; Company 2016</p>
     </footer>
 
-</div> <!-- /container -->
+</div>
 
 
 </body>

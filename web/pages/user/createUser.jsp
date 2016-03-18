@@ -12,32 +12,12 @@
 %>
 <html>
 <head>
-    <title>新建用户</title>
+    <title>用户管理-新建用户-<%=application.getAttribute("proName")%></title>
     <jsp:include page="./../public/public.jsp"/>
 </head>
 <body>
 <div class="container">
-    <div class="header clearfix">
-        <nav>
-            <ul class="nav nav-pills pull-right">
-                <li role="presentation">
-                    <a href="<%=basePath%>pages/home/home.jsp">主页</a>
-                </li>
-                <li role="presentation" class="active">
-                    <a href="<%=basePath%>pages/user/showAllUsers.jsp">用户管理</a>
-                </li>
-                <li role="presentation">
-                    <a href="<%=basePath%>pages/contract/showAllContracts.jsp">合同管理</a>
-                </li>
-                <li role="presentation">
-                    <a href="#">当前用户 : <%=session.getAttribute("loginUserName")%>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        <h3 class="text-muted"><%=application.getAttribute("proName")%>
-        </h3>
-    </div>
+    <jsp:include page="./../public/nav.jsp"/>
     <div>
 
         <form class="form-horizontal">
